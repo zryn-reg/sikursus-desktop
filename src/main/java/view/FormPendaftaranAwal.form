@@ -29,46 +29,64 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="jScrollPane1" alignment="2" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="2" attributes="0">
-                      <Component id="btnProses" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="2" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="2" attributes="0">
+                          <Component id="txtBiaya" alignment="0" min="-2" pref="269" max="-2" attributes="0"/>
+                          <Component id="jLabel1" alignment="2" min="-2" pref="208" max="-2" attributes="0"/>
+                          <Component id="txtNama" alignment="2" min="-2" pref="269" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+                              <Component id="cmbKursus" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Component id="txtJumlah" alignment="1" min="-2" pref="269" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="btnProses" min="-2" pref="61" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
                       <Component id="btnReset" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="txtJumlah" alignment="2" pref="212" max="32767" attributes="0"/>
-                  <Component id="cmbKursus" alignment="2" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtBiaya" alignment="2" max="32767" attributes="0"/>
-                  <Component id="txtNama" alignment="2" max="32767" attributes="0"/>
-                  <Component id="jLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="121" max="32767" attributes="0"/>
+              <EmptySpace min="73" pref="80" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Component id="txtNama" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="txtBiaya" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="txtJumlah" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="cmbKursus" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnReset" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnProses" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="55" pref="166" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnProses" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="btnReset" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -87,19 +105,25 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtBiaya">
       <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="d7" green="ea" red="ee" type="rgb"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="d5" green="e4" red="ea" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="BIAYA"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtJumlah">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="d5" green="e4" red="ea" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Jumlah"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmbKursus">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="d5" green="e4" red="ea" type="rgb"/>
+        </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
             <StringItem index="0" value="Java"/>
@@ -118,10 +142,7 @@
     <Component class="javax.swing.JButton" name="btnProses">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ae" green="ab" red="76" type="rgb"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ae" green="ab" red="76" type="rgb"/>
+          <Color blue="9f" green="b0" red="b6" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Proses"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -140,6 +161,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnReset">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9f" green="b0" red="b6" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Reset"/>
       </Properties>
       <Events>
@@ -155,6 +179,9 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="txtHasil">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="d5" green="e4" red="ea" type="rgb"/>
+            </Property>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
@@ -164,10 +191,7 @@
     <Component class="javax.swing.JTextField" name="txtNama">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="2d" type="rgb"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="d7" green="ea" red="ee" type="rgb"/>
+          <Color blue="d5" green="e4" red="ea" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="NAMA"/>
       </Properties>
