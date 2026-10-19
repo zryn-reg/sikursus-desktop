@@ -12,10 +12,10 @@ package latihan; //package
 public class LatihanBiayaKursus { //class
     public static void main (String[] args){ //main method
         //Variabel
-    String halo = "Selamat datang di Toko Ilzi";
+    String halo = "Biaya Kursus Regza";
     String kode = "JAVA-BSC";
     String nama = "Java Desktop Fundamental";
-    double biaya = 3_800_000;
+    double biaya = 2_500_000;
     double diskon = 0.10;
     double regs = 500_000;
     boolean aktif = true;

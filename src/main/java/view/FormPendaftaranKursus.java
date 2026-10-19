@@ -1,4 +1,3 @@
-
 package view;
 
 import javax.swing.*;
@@ -7,13 +6,15 @@ import java.awt.*;
 
 public class FormPendaftaranKursus extends JFrame {
 
-    private final Color emerald = new Color(16, 185, 129);
-    private final Color emeraldGelap = new Color(5, 150, 105);
-    private final Color emeraldMuda = new Color(209, 250, 229);
-    private final Color latar = new Color(240, 253, 248);
+    private final Color oranye = new Color(242, 89, 18);         // #F25912
+    private final Color ungu = new Color(93, 61, 146);           // #5D3D92
+    private final Color unguTua = new Color(67, 42, 109);        // #432A6D
+    private final Color unguGelap = new Color(33, 26, 50);       // #211A32
+    private final Color lavenderMuda = new Color(228, 220, 242);
+    private final Color latar = new Color(246, 244, 250);
     private final Color putih = Color.WHITE;
-    private final Color teks = new Color(31, 41, 55);
-    private final Color abu = new Color(107, 114, 128);
+    private final Color teks = new Color(33, 26, 50);
+    private final Color abu = new Color(107, 96, 130);
 
     private JTextField txtNama;
     private JTextField txtKursus;
@@ -43,9 +44,9 @@ public class FormPendaftaranKursus extends JFrame {
         JPanel utama = new JPanel(new BorderLayout());
         utama.setBackground(latar);
 
-        // HEADER EMERALD
+        // HEADER
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(emeraldGelap);
+        header.setBackground(unguTua);
         header.setBorder(new EmptyBorder(25, 35, 25, 35));
 
         JPanel infoHeader = new JPanel();
@@ -60,7 +61,7 @@ public class FormPendaftaranKursus extends JFrame {
                 "Lengkapi formulir untuk mendaftar program kursus pilihan Anda"
         );
         subjudul.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        subjudul.setForeground(new Color(209, 250, 229));
+        subjudul.setForeground(lavenderMuda);
 
         infoHeader.add(judul);
         infoHeader.add(Box.createVerticalStrut(8));
@@ -72,7 +73,7 @@ public class FormPendaftaranKursus extends JFrame {
         labelKode.setFont(new Font("SansSerif", Font.BOLD, 14));
         labelKode.setForeground(putih);
         labelKode.setOpaque(true);
-        labelKode.setBackground(new Color(4, 120, 87));
+        labelKode.setBackground(unguGelap);
         labelKode.setBorder(new EmptyBorder(10, 15, 10, 15));
 
         header.add(labelKode, BorderLayout.EAST);
@@ -95,7 +96,7 @@ public class FormPendaftaranKursus extends JFrame {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(putih);
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(209, 250, 229)),
+                BorderFactory.createLineBorder(ungu),
                 new EmptyBorder(22, 22, 22, 22)
         ));
 
@@ -113,9 +114,7 @@ public class FormPendaftaranKursus extends JFrame {
         gbc.insets = new Insets(0, 0, 7, 0);
         panel.add(judul, gbc);
 
-        JLabel deskripsi = new JLabel(
-                "Masukkan informasi pendaftaran Anda."
-        );
+        JLabel deskripsi = new JLabel("Masukkan informasi pendaftaran Anda.");
         deskripsi.setFont(new Font("SansSerif", Font.PLAIN, 12));
         deskripsi.setForeground(abu);
 
@@ -150,9 +149,7 @@ public class FormPendaftaranKursus extends JFrame {
         grupJenis.add(rbMahasiswa);
         grupJenis.add(rbUmum);
 
-        JPanel panelJenis = new JPanel(new FlowLayout(
-                FlowLayout.LEFT, 8, 0
-        ));
+        JPanel panelJenis = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         panelJenis.setOpaque(false);
         panelJenis.add(rbMahasiswa);
         panelJenis.add(rbUmum);
@@ -193,8 +190,8 @@ public class FormPendaftaranKursus extends JFrame {
         // TOMBOL DAFTAR
         JButton btnDaftar = new JButton("Daftar Sekarang");
         btnDaftar.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btnDaftar.setForeground(Color.BLACK);
-        btnDaftar.setBackground(emeraldGelap);
+        btnDaftar.setForeground(putih);
+        btnDaftar.setBackground(oranye);
         btnDaftar.setOpaque(true);
         btnDaftar.setContentAreaFilled(true);
         btnDaftar.setFocusPainted(false);
@@ -206,8 +203,8 @@ public class FormPendaftaranKursus extends JFrame {
         // TOMBOL RESET
         JButton btnReset = new JButton("Reset Form");
         btnReset.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btnReset.setForeground(emeraldGelap);
-        btnReset.setBackground(emeraldMuda);
+        btnReset.setForeground(ungu);
+        btnReset.setBackground(lavenderMuda);
         btnReset.setOpaque(true);
         btnReset.setFocusPainted(false);
         btnReset.setBorderPainted(false);
@@ -229,7 +226,7 @@ public class FormPendaftaranKursus extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(0, 15));
         panel.setBackground(putih);
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(209, 250, 229)),
+                BorderFactory.createLineBorder(ungu),
                 new EmptyBorder(22, 22, 22, 22)
         ));
 
@@ -237,9 +234,7 @@ public class FormPendaftaranKursus extends JFrame {
         judul.setFont(new Font("SansSerif", Font.BOLD, 21));
         judul.setForeground(teks);
 
-        JLabel deskripsi = new JLabel(
-                "Periksa kembali informasi pendaftaran Anda."
-        );
+        JLabel deskripsi = new JLabel("Periksa kembali informasi pendaftaran Anda.");
         deskripsi.setFont(new Font("SansSerif", Font.PLAIN, 12));
         deskripsi.setForeground(abu);
 
@@ -256,7 +251,7 @@ public class FormPendaftaranKursus extends JFrame {
         txtRingkasan.setWrapStyleWord(true);
         txtRingkasan.setFont(new Font("SansSerif", Font.PLAIN, 14));
         txtRingkasan.setForeground(teks);
-        txtRingkasan.setBackground(new Color(248, 250, 252));
+        txtRingkasan.setBackground(latar);
         txtRingkasan.setBorder(new EmptyBorder(15, 15, 15, 15));
         txtRingkasan.setText(
                 "Belum ada pendaftaran.\n\n"
@@ -264,9 +259,7 @@ public class FormPendaftaranKursus extends JFrame {
         );
 
         JScrollPane scroll = new JScrollPane(txtRingkasan);
-        scroll.setBorder(BorderFactory.createLineBorder(
-                new Color(226, 232, 240)
-        ));
+        scroll.setBorder(BorderFactory.createLineBorder(lavenderMuda));
 
         panel.add(bagianAtas, BorderLayout.NORTH);
         panel.add(scroll, BorderLayout.CENTER);
@@ -314,7 +307,7 @@ public class FormPendaftaranKursus extends JFrame {
         field.setForeground(teks);
         field.setPreferredSize(new Dimension(300, 36));
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(203, 213, 225)),
+                BorderFactory.createLineBorder(new Color(184, 170, 210)),
                 new EmptyBorder(5, 10, 5, 10)
         ));
         return field;
@@ -365,8 +358,7 @@ public class FormPendaftaranKursus extends JFrame {
             return;
         }
 
-        String jenis = rbMahasiswa.isSelected()
-                ? "Mahasiswa" : "Umum";
+        String jenis = rbMahasiswa.isSelected() ? "Mahasiswa" : "Umum";
 
         String kursus = (String) cmbKursus.getSelectedItem();
 
