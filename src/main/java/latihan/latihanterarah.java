@@ -1,56 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package latihan;
 
-/**
- *
- * @author USER
- */
 public class latihanterarah {
-     public static void main(String[] args) { //main mehode
-      
-String kode = "JAVA-BSC"; //variabel
-String nama = "Java Desktop Fundamental";
 
-double biaya = 3_800_000;
-double regis = 500_000;
+    public static void main(String[] args) {
 
-double diskonq = 0.05;
-double diskon = 0.10;
-double diskonw = 0.15;
+        String kode = "JAVA-BSC";
+        String nama = "Java Desktop Fundamental";
 
-boolean aktif = true;
+        double biaya = 3_800_000;
+        double regis = 500_000;
 
-double total = biaya + regis;
+        double diskonq = 0.05;  // 5%
+        double diskon  = 0.10;  // 10%
+        double diskonw = 0.15;  // 15%
 
-  if (total >= 3_000_000 ){
+        boolean aktif = true;
+
+        double total = biaya + regis;
+
+        if (total >= 3_000_000) {
 
             double potongan = total * diskonw;
             double totalBayar = total - potongan;
 
             System.out.println("Total      : Rp" + total);
-            System.out.println("Diskon 10% : Rp" + potongan);
+            System.out.println("Diskon 15% : Rp" + potongan);
             System.out.println("Total Bayar: Rp" + totalBayar);
             System.out.println("Status     : MAHAL");
 
-        } else if (total <3_000_000) {
+        } else {
 
             double potongan = total * diskon;
             double totalBayar = total - potongan;
 
             System.out.println("Total      : Rp" + total);
-            System.out.println("Diskon 5%  : Rp" + potongan);
-            System.out.println("Total Bayar: Rp" + totalBayar);
-            System.out.println("Status     : TERJANGKAU");
-        } else{
-            double potongan = total * diskon1;
-            double totalBayar = total - potongan;
-
-            System.out.println("Total      : Rp" + total);
-            System.out.println("Diskon 5%  : Rp" + potongan);
+            System.out.println("Diskon 10% : Rp" + potongan);
             System.out.println("Total Bayar: Rp" + totalBayar);
             System.out.println("Status     : TERJANGKAU");
         }
