@@ -11,7 +11,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,13 +21,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import model.Peserta;
 
 /**
- * Form Peserta - Pertemuan 9 (JDBC + DAO + PreparedStatement).
+ * Form Peserta - Pertemuan 10 (CRUD lengkap + JTable + Search).
  * Form hanya mengurus input/validasi/feedback. Akses database ada di PesertaDAO.
  */
 public class FormPeserta extends JFrame {
@@ -34,6 +40,10 @@ public class FormPeserta extends JFrame {
     private final Color hijauSedang = new Color(0, 127, 95);
     private final Color hijauMuda = new Color(230, 244, 236);
     private final Color latar = new Color(241, 248, 245);
+
+    // P10: DAO dan id peserta yang sedang dipilih (-1 = belum ada)
+    private final PesertaDAO dao = new PesertaDAO();
+    private int selectedId = -1;
 
     private JTextField txtNim;
     private JTextField txtNama;
@@ -44,12 +54,22 @@ public class FormPeserta extends JFrame {
     private JTextField txtNoHp;
     private JTextField txtEmail;
     private JButton btnSimpan;
+    private JButton btnUbah;
+    private JButton btnHapus;
     private JButton btnReset;
+
+    // P10: pencarian + tabel
+    private JTextField txtCari;
+    private JButton btnCari;
+    private JTable tblPeserta;
 
     public FormPeserta() {
         setTitle("Form Peserta - SIKURSUS");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         buatTampilan();
+        configureTable();
+        loadTable();
+        clearForm();
         pack();
         setResizable(false);
         setLocationRelativeTo(null);
@@ -103,21 +123,80 @@ public class FormPeserta extends JFrame {
         tambahBaris(form, 4, "No. HP", txtNoHp);
         tambahBaris(form, 5, "Email", txtEmail);
 
-        utama.add(form, BorderLayout.CENTER);
-
-        // TOMBOL
+        // TOMBOL AKSI
         btnSimpan = buatTombol("Simpan", hijauSedang);
         btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
+        btnUbah = buatTombol("Ubah", hijauSedang);
+        btnUbah.addActionListener(this::btnUbahActionPerformed);
+
+        btnHapus = buatTombol("Hapus", new Color(183, 28, 28));
+        btnHapus.addActionListener(this::btnHapusActionPerformed);
+
         btnReset = buatTombol("Reset", hijauTua);
-        btnReset.addActionListener(e -> clearForm());
+        btnReset.addActionListener(this::btnResetActionPerformed);
 
         JPanel panelTombol = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
         panelTombol.setBackground(latar);
-        panelTombol.setBorder(new EmptyBorder(0, 0, 14, 0));
         panelTombol.add(btnSimpan);
+        panelTombol.add(btnUbah);
+        panelTombol.add(btnHapus);
         panelTombol.add(btnReset);
-        utama.add(panelTombol, BorderLayout.SOUTH);
+
+        // BAGIAN ATAS = form + tombol
+        JPanel atas = new JPanel();
+        atas.setLayout(new BoxLayout(atas, BoxLayout.Y_AXIS));
+        atas.setBackground(latar);
+        atas.add(form);
+        atas.add(panelTombol);
+
+        // PENCARIAN
+        JLabel lblCari = new JLabel("Cari Nama / NIM");
+        lblCari.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblCari.setForeground(hijauTua);
+
+        txtCari = buatTextField();
+        txtCari.setPreferredSize(new Dimension(260, 30));
+        txtCari.addActionListener(this::btnCariActionPerformed); // tekan Enter = cari
+
+        btnCari = buatTombol("Cari", hijauSedang);
+        btnCari.addActionListener(this::btnCariActionPerformed);
+
+        JPanel panelCari = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
+        panelCari.setBackground(latar);
+        panelCari.setBorder(new EmptyBorder(0, 18, 0, 18));
+        panelCari.add(lblCari);
+        panelCari.add(txtCari);
+        panelCari.add(btnCari);
+
+        // TABEL
+        tblPeserta = new JTable();
+        tblPeserta.setRowHeight(24);
+        tblPeserta.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        tblPeserta.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblPeserta.getTableHeader().setBackground(hijauTua);
+        tblPeserta.getTableHeader().setForeground(Color.WHITE);
+        tblPeserta.setSelectionBackground(hijauSedang);
+        tblPeserta.setSelectionForeground(Color.WHITE);
+        // klik baris atau geser pakai panah keyboard -> isi form
+        tblPeserta.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                isiFormDariTabel();
+            }
+        });
+
+        JScrollPane scroll = new JScrollPane(tblPeserta);
+        scroll.setPreferredSize(new Dimension(760, 220));
+        scroll.setBorder(BorderFactory.createLineBorder(hijauSedang));
+
+        JPanel panelTabel = new JPanel(new BorderLayout());
+        panelTabel.setBackground(latar);
+        panelTabel.setBorder(new EmptyBorder(0, 18, 18, 18));
+        panelTabel.add(panelCari, BorderLayout.NORTH);
+        panelTabel.add(scroll, BorderLayout.CENTER);
+
+        utama.add(atas, BorderLayout.CENTER);
+        utama.add(panelTabel, BorderLayout.SOUTH);
 
         setContentPane(utama);
     }
@@ -166,93 +245,273 @@ public class FormPeserta extends JFrame {
         return b;
     }
 
+    // ===================== JTABLE =====================
+
+    private void configureTable() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"ID", "NIM", "Nama", "JK", "Prodi", "No. HP", "Email"},
+                0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // edit lewat form, bukan lewat sel tabel
+            }
+        };
+        tblPeserta.setModel(model);
+        tblPeserta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
+    private void fillTable(List<Peserta> data) {
+        DefaultTableModel model = (DefaultTableModel) tblPeserta.getModel();
+        model.setRowCount(0); // jangan dihapus, biar data tidak dobel
+        for (Peserta p : data) {
+            model.addRow(new Object[]{
+                p.getId(),
+                p.getNim(),
+                p.getNama(),
+                p.getJenisKelamin(),
+                p.getProdi(),
+                p.getNoHp(),
+                p.getEmail()
+            });
+        }
+    }
+
+    private void loadTable() {
+        try {
+            fillTable(dao.findAll());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Gagal memuat data: " + ex.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void refreshData() {
+        loadTable();
+        clearForm();
+        txtCari.setText("");
+    }
+
+    // anti NullPointerException kalau no_hp / email kosong di database
+    private String cell(int row, int col) {
+        Object v = tblPeserta.getValueAt(row, col);
+        return v == null ? "" : v.toString();
+    }
+
+    // dipanggil saat baris tabel dipilih
+    private void isiFormDariTabel() {
+        int row = tblPeserta.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+        // ambil ID dari kolom ID (kolom 0), BUKAN dari nomor baris
+        selectedId = Integer.parseInt(tblPeserta.getValueAt(row, 0).toString());
+        txtNim.setText(cell(row, 1));
+        txtNama.setText(cell(row, 2));
+        String jk = cell(row, 3);
+        rbLaki.setSelected("L".equals(jk));
+        rbPerempuan.setSelected("P".equals(jk));
+        txtProdi.setText(cell(row, 4));
+        txtNoHp.setText(cell(row, 5));
+        txtEmail.setText(cell(row, 6));
+
+        btnUbah.setEnabled(true);
+        btnHapus.setEnabled(true);
+    }
+
+    // ===================== FORM =====================
+
     private void clearForm() {
+        selectedId = -1;
         txtNim.setText("");
         txtNama.setText("");
         buttonGroupJenisKelamin.clearSelection();
         txtProdi.setText("");
         txtNoHp.setText("");
         txtEmail.setText("");
+        tblPeserta.clearSelection();
+        btnUbah.setEnabled(false);
+        btnHapus.setEnabled(false);
         txtNim.requestFocus();
     }
 
-    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {
-        // 1. Ambil input
-        String nim = txtNim.getText().trim();
-        String nama = txtNama.getText().trim();
-        String prodi = txtProdi.getText().trim();
-        String noHp = txtNoHp.getText().trim();
-        String email = txtEmail.getText().trim();
-
-        String jenisKelamin = "";
+    private String getJenisKelamin() {
         if (rbLaki.isSelected()) {
-            jenisKelamin = "L";
-        } else if (rbPerempuan.isSelected()) {
-            jenisKelamin = "P";
+            return "L";
         }
+        if (rbPerempuan.isSelected()) {
+            return "P";
+        }
+        return null;
+    }
 
-        // 2. Validasi wajib isi (sebelum menyentuh database)
-        if (nim.isEmpty() || nama.isEmpty() || prodi.isEmpty()
-                || jenisKelamin.isEmpty()) {
+    private boolean validateForm() {
+        if (txtNim.getText().trim().isEmpty()
+                || txtNama.getText().trim().isEmpty()
+                || txtProdi.getText().trim().isEmpty()
+                || getJenisKelamin() == null) {
             JOptionPane.showMessageDialog(
                     this,
                     "NIM, nama, jenis kelamin, dan prodi wajib diisi.",
                     "Validasi",
                     JOptionPane.WARNING_MESSAGE
             );
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Bentuk object Peserta dari isi form. Model memvalidasi format
+     * No. HP & email, jadi bisa melempar IllegalArgumentException.
+     */
+   private Peserta getFormData() {
+    Peserta p = new Peserta(
+            txtNim.getText().trim(),
+            txtNama.getText().trim(),
+            getJenisKelamin(),
+            txtProdi.getText().trim(),
+            txtNoHp.getText().trim(),
+            txtEmail.getText().trim()
+    );
+    if (selectedId > 0) {   // hanya set id kalau ada baris yang dipilih
+        p.setId(selectedId);
+    }
+    return p;
+}
+
+    // ===================== EVENT TOMBOL =====================
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!validateForm()) {
             return;
         }
-
-        // 3. Bentuk object Peserta (model memvalidasi format No. HP & email)
         Peserta peserta;
         try {
-            peserta = new Peserta(nim, nama, jenisKelamin, prodi, noHp, email);
+            peserta = getFormData();
         } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    ex.getMessage(),
-                    "Validasi",
-                    JOptionPane.WARNING_MESSAGE
-            );
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Validasi", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // 4. Panggil DAO
-        PesertaDAO dao = new PesertaDAO();
         try {
-            boolean berhasil = dao.insert(peserta);
-
-            if (berhasil) {
-                JOptionPane.showMessageDialog(
-                        this, "Data peserta berhasil disimpan."
-                );
-                clearForm();
+            if (dao.insert(peserta)) {
+                JOptionPane.showMessageDialog(this, "Data peserta berhasil disimpan.");
+                refreshData();
             } else {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Data tidak tersimpan.",
-                        "Informasi",
-                        JOptionPane.WARNING_MESSAGE
-                );
+                JOptionPane.showMessageDialog(this, "Data tidak tersimpan.",
+                        "Informasi", JOptionPane.WARNING_MESSAGE);
             }
         } catch (SQLIntegrityConstraintViolationException e) {
-            // NIM duplikat -> ditolak oleh UNIQUE di MySQL
-            JOptionPane.showMessageDialog(
-                    this,
-                    "NIM " + nim + " sudah terdaftar.\n\n" + e.getMessage(),
-                    "Database Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            JOptionPane.showMessageDialog(this,
+                    "NIM " + peserta.getNim() + " sudah terdaftar.\n\n" + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(
-                    this,
+            JOptionPane.showMessageDialog(this,
                     "Gagal menyimpan data:\n" + e.getMessage(),
-                    "Database Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedId <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Pilih data peserta pada tabel terlebih dahulu.");
+            return;
+        }
+        if (!validateForm()) {
+            return;
+        }
+        Peserta peserta;
+        try {
+            peserta = getFormData();
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Validasi", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            if (dao.update(peserta)) {
+                JOptionPane.showMessageDialog(this, "Data peserta berhasil diubah.");
+                refreshData();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Data tidak ditemukan atau tidak berubah.");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            JOptionPane.showMessageDialog(this,
+                    "NIM " + peserta.getNim() + " sudah dipakai peserta lain.\n\n"
+                    + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Gagal mengubah data: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedId <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Pilih data peserta yang akan dihapus.");
+            return;
+        }
+        int jawab = JOptionPane.showConfirmDialog(
+                this,
+                "Yakin menghapus peserta: " + txtNama.getText().trim() + "?",
+                "Konfirmasi Hapus",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (jawab != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            if (dao.delete(selectedId)) {
+                JOptionPane.showMessageDialog(this, "Data peserta berhasil dihapus.");
+                refreshData();
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // peserta sudah dipakai di tabel pendaftaran (foreign key)
+            JOptionPane.showMessageDialog(this,
+                    "Peserta ini sudah punya data pendaftaran sehingga tidak bisa dihapus.\n\n"
+                    + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Gagal menghapus data: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {
+        String keyword = txtCari.getText().trim();
+        try {
+            if (keyword.isEmpty()) {
+                loadTable();
+            } else {
+                fillTable(dao.search(keyword));
+            }
+            clearForm(); // supaya selectedId lama tidak nyangkut
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Pencarian gagal: " + ex.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {
+        txtCari.setText("");
+        loadTable();
+        clearForm();
     }
 
     public static void main(String[] args) {
