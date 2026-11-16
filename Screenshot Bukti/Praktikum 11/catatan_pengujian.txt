@@ -1,0 +1,12 @@
+T01 Username & password kosong      -> muncul pesan wajib diisi, tidak masuk Dashboard
+T02 Username benar, password salah  -> login gagal, password dikosongkan
+T03 Login admin / Admin@123         -> Dashboard terbuka, role ADMIN, semua Master aktif
+T04 Login operator / Operator@123   -> role OPERATOR, Instruktur/Kursus/Kelas nonaktif
+T05 Klik Peserta 5 kali             -> hanya satu FormPeserta terbuka
+T06 Tutup FormPeserta dengan X      -> Dashboard tetap hidup
+T07 Buka Peserta lagi               -> berhasil dibuat kembali
+T08 Buka Kursus/Instruktur/Kelas    -> form tampil, Dashboard tetap aktif
+T09 Logout saat child masih terbuka -> semua child tertutup, kembali ke Login
+T10 Matikan MySQL lalu login        -> muncul pesan database error, aplikasi tidak crash
+T11 Pindahkan project ke folder lain-> icon tetap tampil
+T12 Tutup Aplikasi                  -> muncul konfirmasi, Yes menutup program
