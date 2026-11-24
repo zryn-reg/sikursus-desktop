@@ -18,6 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import model.User;
+import report.ReportService;
 import util.UserSession;
 import util.WindowManager;
 
@@ -48,6 +49,7 @@ public class DashboardFrame extends JFrame {
     private JMenuItem miPembayaran;
     private JMenuItem miLaporanPeserta;
     private JMenuItem miLaporanPendaftaran;
+    private JMenuItem miLaporanPembayaran;
     private JMenuItem miLogout;
     private JMenuItem miTutup;
 
@@ -154,8 +156,10 @@ public class DashboardFrame extends JFrame {
         menuLaporan = new JMenu("Laporan");
         miLaporanPeserta = new JMenuItem("Laporan Peserta");
         miLaporanPendaftaran = new JMenuItem("Laporan Pendaftaran");
+        miLaporanPembayaran = new JMenuItem("Laporan Pembayaran");
         menuLaporan.add(miLaporanPeserta);
         menuLaporan.add(miLaporanPendaftaran);
+        menuLaporan.add(miLaporanPembayaran);
 
         menuKeluar = new JMenu("Keluar");
         miLogout = new JMenuItem("Logout");
@@ -176,8 +180,9 @@ public class DashboardFrame extends JFrame {
         miKelas.addActionListener(this::miKelasActionPerformed);
         miPendaftaran.addActionListener(this::miPendaftaranActionPerformed);
         miPembayaran.addActionListener(this::miPembayaranActionPerformed);
-        miLaporanPeserta.addActionListener(this::miLaporanActionPerformed);
-        miLaporanPendaftaran.addActionListener(this::miLaporanActionPerformed);
+        miLaporanPeserta.addActionListener(this::miLaporanPesertaActionPerformed);
+        miLaporanPendaftaran.addActionListener(this::miPendaftaranActionPerformed);
+        miLaporanPembayaran.addActionListener(this::miLaporanPembayaranActionPerformed);
         miLogout.addActionListener(this::miLogoutActionPerformed);
         miTutup.addActionListener(this::miTutupActionPerformed);
     }
@@ -246,9 +251,10 @@ public class DashboardFrame extends JFrame {
 
     // ===================== TRANSAKSI & LAPORAN (placeholder) =====================
 
+    // dipakai oleh Transaksi > Pendaftaran dan Laporan > Laporan Pendaftaran
+    // (pilih baris di tabel lalu klik Cetak Terpilih)
     private void miPendaftaranActionPerformed(java.awt.event.ActionEvent evt) {
-        JOptionPane.showMessageDialog(this,
-                "Modul Pendaftaran sedang dikembangkan pada tahap project berikutnya.");
+        WindowManager.open(PendaftaranFrame.class, PendaftaranFrame::new);
     }
 
     private void miPembayaranActionPerformed(java.awt.event.ActionEvent evt) {
@@ -256,9 +262,12 @@ public class DashboardFrame extends JFrame {
                 "Modul Pembayaran sedang dikembangkan pada tahap project berikutnya.");
     }
 
-    private void miLaporanActionPerformed(java.awt.event.ActionEvent evt) {
-        JOptionPane.showMessageDialog(this,
-                "Modul laporan diaktifkan pada Pertemuan 12 dengan Jaspersoft Studio.");
+    private void miLaporanPesertaActionPerformed(java.awt.event.ActionEvent evt) {
+        ReportService.tampilkanLaporanPeserta();
+    }
+
+    private void miLaporanPembayaranActionPerformed(java.awt.event.ActionEvent evt) {
+        WindowManager.open(LaporanPembayaranFrame.class, LaporanPembayaranFrame::new);
     }
 
     // ===================== LOGOUT & TUTUP =====================

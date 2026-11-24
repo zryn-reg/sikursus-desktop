@@ -29,9 +29,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import model.Peserta;
+import report.ReportService;
 
 /**
- * Form Peserta - Pertemuan 10 (CRUD lengkap + JTable + Search).
+ * Form Peserta - Pertemuan 10 (CRUD lengkap + JTable + Search)
+ * + Pertemuan 12 (tombol Cetak laporan peserta).
  * Form hanya mengurus input/validasi/feedback. Akses database ada di PesertaDAO.
  */
 public class FormPeserta extends JFrame {
@@ -57,6 +59,7 @@ public class FormPeserta extends JFrame {
     private JButton btnUbah;
     private JButton btnHapus;
     private JButton btnReset;
+    private JButton btnCetak;
 
     // P10: pencarian + tabel
     private JTextField txtCari;
@@ -65,7 +68,8 @@ public class FormPeserta extends JFrame {
 
     public FormPeserta() {
         setTitle("Form Peserta - SIKURSUS");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // DISPOSE: menutup form ini tidak mematikan seluruh aplikasi
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         buatTampilan();
         configureTable();
         loadTable();
@@ -136,12 +140,16 @@ public class FormPeserta extends JFrame {
         btnReset = buatTombol("Reset", hijauTua);
         btnReset.addActionListener(this::btnResetActionPerformed);
 
+        btnCetak = buatTombol("Cetak", hijauSedang);
+        btnCetak.addActionListener(this::btnCetakActionPerformed);
+
         JPanel panelTombol = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
         panelTombol.setBackground(latar);
         panelTombol.add(btnSimpan);
         panelTombol.add(btnUbah);
         panelTombol.add(btnHapus);
         panelTombol.add(btnReset);
+        panelTombol.add(btnCetak);
 
         // BAGIAN ATAS = form + tombol
         JPanel atas = new JPanel();
@@ -368,20 +376,20 @@ public class FormPeserta extends JFrame {
      * Bentuk object Peserta dari isi form. Model memvalidasi format
      * No. HP & email, jadi bisa melempar IllegalArgumentException.
      */
-   private Peserta getFormData() {
-    Peserta p = new Peserta(
-            txtNim.getText().trim(),
-            txtNama.getText().trim(),
-            getJenisKelamin(),
-            txtProdi.getText().trim(),
-            txtNoHp.getText().trim(),
-            txtEmail.getText().trim()
-    );
-    if (selectedId > 0) {   // hanya set id kalau ada baris yang dipilih
-        p.setId(selectedId);
+    private Peserta getFormData() {
+        Peserta p = new Peserta(
+                txtNim.getText().trim(),
+                txtNama.getText().trim(),
+                getJenisKelamin(),
+                txtProdi.getText().trim(),
+                txtNoHp.getText().trim(),
+                txtEmail.getText().trim()
+        );
+        if (selectedId > 0) { // model menolak id negatif; id hanya di-set saat ada baris dipilih
+            p.setId(selectedId);
+        }
+        return p;
     }
-    return p;
-}
 
     // ===================== EVENT TOMBOL =====================
 
@@ -512,6 +520,11 @@ public class FormPeserta extends JFrame {
         txtCari.setText("");
         loadTable();
         clearForm();
+    }
+
+    // P12: buka laporan seluruh peserta di JasperViewer
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {
+        ReportService.tampilkanLaporanPeserta();
     }
 
     public static void main(String[] args) {
